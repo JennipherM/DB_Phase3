@@ -1,0 +1,183 @@
+-- create database RestaurantManager;
+use RestaurantManager;
+
+create table Users(
+	UserID int Primary Key identity(1,1) Not null,
+	Password varchar(50) not null,
+	RoleID int not null	,
+	FirstName varchar(50) not null,
+	LastName varchar(50) not null,
+	Address varchar (50) not null,
+	City varchar(50) not null,
+	State varchar (50) default 'Texas',
+	Zip varchar(50) not null,
+	PhoneNumber varchar(50)
+);
+create table Roles(
+	RoleID int primary key identity(1,1) not null,
+	RoleName varchar(50),
+	Access varchar(50)
+);
+create table Tasks(
+	AssignmentID int primary key identity(1,1),
+	DueDate date not null,
+	Description varchar(255) not null,
+	UserID int,
+	Status varchar(50) not null,
+	CompletedBy varchar(50)
+);
+create table MenuItems(
+	ItemID int primary key identity(1,1) not null,
+	ItemName varchar(50) not null,
+	Category varchar(50),
+	Description varchar (255),
+	Price decimal(4,2) not null
+);
+create table Orders(
+	OrderID int primary key identity(1,1) not null,
+	OrderTime datetime not null,
+	Discount decimal (4,2) default 0,
+	Status varchar(50) not null,
+	OrderType varchar(50),
+	UserId int
+);
+
+create table OrderDetails(
+	DetailsID int primary key identity(1,1) not null,
+	ItemID int not null, 
+	TableID int,
+	OrderID int not null
+);
+create table Tables(
+	TableID int primary key identity(1,1) not null,
+	Availability varchar(50), 
+	NumberOfSeats int, 
+	TableType varchar(50)
+);
+create table Reservations(
+	ReservationID int primary key identity(1,1) not null,
+	CustomerName varchar(50) not null,
+	ReservationTime datetime not null,
+	GroupSize int not null, 
+	TableID int
+);
+create table Bills(
+	BillID int primary key identity(1,1) not null,
+	OrderID int not null,
+	TableID int
+);
+
+-- Foreign Keys
+alter table users
+add foreign key (roleId) references roles(roleID);
+
+alter table orders
+add foreign key (userid) references users(userid);
+
+alter table OrderDetails
+add foreign key (ItemId) references MenuItems(ItemId),
+	foreign key (tableID) references tables(tableID),
+	foreign key (orderID) references orders(orderId);
+
+alter table reservations
+add foreign key (TableID) references tables(tableID);
+
+alter table bills
+add foreign key (orderID) references Orders(orderID),
+	foreign key (tableID) references tables(tableID);
+
+alter table tasks
+add foreign key (userID) references users(userid)
+
+-- Insert Values
+insert into Roles(RoleName, access)
+values ('Administrator', 'FullAccess'),
+		('Manager', 'MediumAccess'),
+		('Staff', 'LowAccess');
+Insert Into Users (Password, RoleId, FirstName, LastName, Address, City,State, Zip, Phonenumber)
+Values ('password1', 1,'John', 'Doe', '1234 North 1st St', 'Amarillo', 'Texas', '79118', '123-456-7890'),
+		('password2', 1,'Jane', 'Smith', '4321 South 9th Ave', 'Amarillo', 'Texas', '79118', '321-654-0987'),
+		('password3', 2, 'Frank', 'Murry', '5678 West 25st Rd', 'Amarillo', 'Texas', '79118', '456-789-0123'),
+		('password4', 3, 'Will', 'Crawford', '9012 East 19st St', 'Amarillo', 'Texas', '79118', '654-987-3210'),
+		('password5', 3, 'Tara', 'White', '3456 Main Ave', 'Amarillo', 'Texas', '79118', '789-012-3456'),
+		('password6', 3, 'Mark', 'Thompson', '7890 Summit St', 'Amarillo', 'Texas', '79118', '987-210-6543'),
+		('password7', 3, 'Alice', 'Brown', '8546 North 78st Ln', 'Amarillo', 'Texas', '79118', '564-845-6824'),
+		('password8', 3, 'Bob', 'Builder', '187 Brick Rd', 'Amarillo', 'Texas', '79118', '632-026-2790'),
+		('password9', 3, 'Cindy', 'Campbell', '5812 North 21st Ave', 'Amarillo', 'Texas', '79118', '469-872-0214'),
+		('password10', 3, 'Laura', 'Adams', '2137 South 88st St', 'Amarillo', 'Texas', '79118', '187-136-8921');
+Insert into Tasks
+values ('2025-06-01', 'Sweep floors', 5, 'Completed', 'Tara'),
+		('2025-06-01', 'Mop floors', 5, 'Not completed', null),
+		('2025-06-01', 'Prep silverware', 7, 'Not completed', 'Alice'),
+		('2025-06-02', 'Check expiration dates', 7, 'Completed', 'Alice'),
+		('2025-06-02', 'Take out trash', 9, 'Completed', 'Cindy'),
+		('2025-06-02', 'Wipe down menus', 9, 'Not completed', null),
+		('2025-06-03', 'Clean grill', 8, 'Completed', 'Bob'),
+		('2025-06-03', 'Refill condiments', 8, 'Not completed', null),
+		('2025-06-03', 'Clean bathroom', 6, 'Completed', 'Mark'),
+		('2025-06-03', 'Vacuum Rugs', 6, 'Completed','Mark');
+Insert into MenuItems
+Values ('Pizza', 'Lunch', 'Pizza with any topping', 10.65),
+		('Salad', 'Lunch', 'Ceasar salad with ranch', 6.75),
+		('Spaghetti', 'Lunch', 'Spaghetti with tomato sauce', 5.87),
+		('Pancakes', 'Breakfast', 'Pancakes with maple syrup', 5.21),
+		('French Toast', 'Breakfast', 'French toast with power sugar', 6.15),
+		('Soda', 'Drinks', 'Coke or Pepsi products', 1.50),
+		('Coffee', 'Drinks', 'Regular or Decaf', 1.32),
+		('Waffles', 'Breakfast', 'Waffles with maple syrup', 5.20),
+		('Tea', 'Drinks', 'Sweet or Unsweetened', 1.50),
+		('Smoothie Bowl', 'Breakfast', 'Blended with your choice of fruit', 4.50);
+
+Insert into tables
+values('Available', 4, 'Table'),
+		('Occupied', 2, 'Table'),
+		('Available', 6, 'Booth'),
+		('Reserved', 8, 'Table'),
+		('Occupied', 4, 'Booth'),
+		('Reserved', 10, 'Table'),		
+		('Available', 10, 'Table'),
+		('Occupied', 2, 'Table'),
+		('Reserved', 8, 'Table'),
+		('Occupied', 4, 'Booth');
+
+Insert into orders
+values('2021-05-25 15:30:00', 0.05, 'Pending', 'dine-in',4),
+		('2021-05-25 14:15:05', 0.05, 'Ready', 'dine-in',6),
+		('2021-05-25 13:45:54', 0, 'Finished','take-out',5),
+		('2021-05-25 15:21:12', 0, 'Pending','dine-in',7);
+
+Insert into OrderDetails
+values(5, 2, 1),
+		(6, 2, 1),
+		(1, 10, 4),
+		(3, 10, 4),
+		(2, 10, 4),
+		(3, 10, 4),
+		(5, null, 3),
+		(9, null, 3),
+		(5, null, 3),
+		(7, 5, 2),
+		(9, 5, 2);
+
+Insert into Reservations
+values ('Kim Lund', '2025-05-30 7:30:00', 8, 9),
+		('Mary Black', '2025-05-31 15:00:00', 10, 6),
+		('Tom Marks', '2025-06-01 14:00:00', 5, 4),
+		('Nick Rost', '2025-06-02 13:30:00', 10, null),
+		('Pam Cross', '2025-06-04 14:30:00', 7, null),
+		('Sam Sparks', '2025-06-01 15:00:00', 4, null),
+		('Vicky Bast', '2025-06-03 09:30:00', 10, null),
+		('Linda Barns', '2025-06-09 10:00:00', 6, null),
+		('Alex Earns', '2025-06-04 08:00:00', 3, null),
+		('Jake Jones', '2025-06-05 09:30:00', 9, null);
+		
+Insert into bills 
+values(1,2),
+		(2,10),
+		(3, null),
+		(4,5);
+
+-- Queries
+Select * from menuItems order by category;
+Select * from tables where Availability = 'available';
+Select * from orders order by ordertime desc;

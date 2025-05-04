@@ -1,0 +1,259 @@
+	--	Employee Procedures
+
+create procedure AddEmployee (@Password varchar(50), @RoleID int, @FirstName varchar (50),
+							@LastName varchar(50), @Address varchar (50), @City varchar(50),
+							@State varchar (50), @Zip varchar(50), @Phonenumber varchar(50))
+As 
+begin
+	insert into Users(Password, RoleID, FirstName,LastName, Address, City,State, Zip, Phonenumber)
+	values (@Password, @RoleID, @FirstName,@LastName, @Address, @City,@State, @Zip, @Phonenumber)
+end;
+
+	execute AddEmployee 'password11', 3, 'Beth', 'Sohapi', '854 Grow St', 'Amarillo', 'TX', '79118', '458-901-0321'
+
+create procedure RemoveEmployee(@userId int)
+as 
+begin
+	delete from users where userid = @userid;
+end;
+
+	execute RemoveEmployee 11;
+
+
+	--	Menu Procedures
+
+create procedure AddMenuItem ( @Itemname varchar(255), @category varchar(255),
+		@description varchar (255), @price decimal (4,2) )
+AS
+Begin 
+	Insert into MenuItems (ItemName, Category, Description, Price)
+	values (@ItemName, @category, @description, @price)
+End;
+
+	Execute AddMenuItem  'Grilled Chicken', 'Lunch', 'Grilled chicken with sides', 10.54
+
+
+create procedure ModifyMenuItem (@itemid int,
+        @Itemname varchar(255), @category varchar(255),
+        @description varchar (255), @price decimal(4,2) )
+AS
+Begin 
+        Update MenuItems Set Itemname = @Itemname, category = @category, 
+        description= @description, price = @price
+                
+        where itemid= @itemId;
+End;
+
+	execute ModifyMenuItem  1, 'Pizza', 'Lunch', 'Pizza with 3 toppings', 10.45
+
+
+create procedure RemoveMenuItem (@itemId int)
+AS
+Begin 
+        delete from MenuItems where itemId = @itemid;
+End;
+	execute RemoveMenuItem 11
+
+
+	-- Order Procedures
+
+create procedure AddOrder(@orderTime datetime, @discount decimal, @status varchar(50),
+				@orderType varchar(50), @userId int)
+AS 
+begin
+        insert into Orders (ordertime, discount, status, orderType, userId)
+        values(@ordertime, @discount, @status, @orderType, @userid)
+end;
+
+-- I wasn't able to get Getdate or current_timestamp to work
+	execute AddOrder '2021-05-25 15:45:00', 0, 'pending', 'dine-in', 3;
+
+
+create procedure UpdateOrder(@orderID int, @discount decimal (4,2),@status varchar(50)) 
+as
+begin
+		update Orders set discount=@discount, status=@status
+		where orderID = @orderID
+end;
+
+	execute updateOrder 5, 0, 'Ready', 3
+
+create procedure addOrderMenuItem(@orderid int, @tableid varchar(50), @itemid int)
+as
+begin
+	insert into OrderDetails (TableID, itemid, OrderID)
+	values (@TableID, @itemid, @OrderID)
+end;
+
+
+	-- Order Details Procedures
+
+create procedure AddOrderDetails( @ItemID int, @tableid int, @orderId int)
+as
+begin
+        insert into OrderDetails(itemid, tableid, orderid)
+        values(@itemid,@tableid, @orderid)
+end;
+	execute AddOrderDetails 5,3,5
+
+create procedure UpdateOrderDetails (@itemid int, @tableid int, @orderid int)
+as
+begin
+        update OrderDetails set itemid = @ItemID, tableid=@tableid, OrderID=@orderid
+        where orderid = @orderid
+end;
+
+	execute UpdateOrderDetails 3,3,5;
+
+create procedure removeOrderItem(@orderid int, @itemID int)
+as
+begin
+	delete from orderdetails where orderid = @orderid and itemid = @itemid
+end;
+
+
+	-- Roles Procedures
+
+create procedure AssignRoles (@firstname varchar(50), @lastName varchar(50), @address varchar(50), @city varchar(50),
+                                                        @state varchar(50), @zip varchar(50), @phoneNumber varchar(50), @RoleID int)
+AS 
+begin 
+        insert into Users (firstname, lastName, address, city, state, zip, phoneNumber, RoleID)
+        values (@firstname, @lastName, @address, @city, @state, @zip, @phoneNumber, @RoleID)
+end;
+
+	execute AssignRoles 'Rachael', 'Jones','5481 W 21st St', 'Amarillo', 'Texas', '79119', '586-402-1305', 1
+
+
+create procedure UpdateRoles(@userid int, @roleid int)
+AS 
+begin
+        update users set roleid=@roleid
+        where userid = @userid
+end;
+	execute UpdateRoles 10,2
+
+
+	-- Bill Procedures
+
+--followed example from sqltutorial, wasn't sure how to make it as one statement
+create procedure getItemBill (@orderid int)
+AS
+begin
+        declare @status varchar(50);
+        select @status=status from orders where orderid=@orderid;
+        if @status = 'Finished'
+begin
+        select orders.orderid,  menuitems.itemname, menuitems.price
+        from menuitems
+        inner join orderdetails on menuitems.itemID = orderdetails.itemid
+        inner join orders on orderdetails.orderID = orders.orderid
+        where orders.orderid = @orderid
+		end
+end;   
+
+create procedure getTotalBill(@orderid int)
+as
+begin
+	select O.orderid, sum(mi.Price)as cost, o.discount , sum(mi.Price) - (sum(mi.Price)*o.discount) as TotalPrice
+
+	from menuitems mi
+			inner join orderdetails od on mi.itemID = od.itemid
+			inner join orders O on od.orderID = o.orderid
+	where o.orderid = @orderid
+	group by o.orderid, o.discount;
+
+end;
+
+
+	-- Task Procedures
+create procedure GetTasks (@date date)
+as
+begin
+        select * 
+        from Tasks
+        where Duedate = @date
+end;
+	execute getTasks '2025-06-02'
+
+
+create procedure createTask(@duedate date, @description varchar(255), @userID int, @status varchar(50), @completedBy varchar(50))
+as
+begin
+	insert into Tasks(duedate, description, userID, status, completedBy)
+	values (@duedate, @description, @userID, @status, @completedBy)
+end;
+
+
+create procedure updateTaskStatus(@AssignmentID int, @status varchar (50), @completedBy varchar(50))
+as 
+begin
+	update tasks set status=@status, CompletedBy=@completedby
+	where AssignmentID=@AssignmentID
+end;
+
+
+	-- Reservation Procedures
+
+create procedure AddReservation(@CustomerName varchar(50), @ReservationTime datetime, @groupSize int, @TableID int)
+as
+Begin
+	insert into Reservations(CustomerName, ReservationTime, groupSize,TableID )
+	values (@CustomerName, @ReservationTime, @groupSize,@TableID )
+End;
+
+create procedure RemoveRsv(@reservationId int)
+as
+begin
+	delete from reservations where reservationID = @reservationID;
+end;
+
+
+
+	-- Other Procedures
+
+create procedure getDailySales(@ordertime date)
+as
+begin
+	select cast(O.ordertime as date) as date, sum(mi.Price) - (sum(mi.Price)*o.discount) as TotalPrice
+
+	from menuitems mi
+			inner join orderdetails od on mi.itemID = od.itemid
+			inner join orders O on od.orderID = o.orderid
+	where cast(O.ordertime as date) = @ordertime
+	group by cast(O.ordertime as date),o.discount;
+
+end;
+
+
+create procedure Top3Items
+as
+ begin
+select top 3 itemid, count(itemId) as NumOfSales from Orderdetails 
+group by itemid
+order by count(itemid) desc
+
+end;
+
+
+create procedure UpdateTblStatus(@availability varchar(50), @tableid int)
+as 
+begin
+	update tables set availability = @availability
+	where tableid = @tableid
+end;
+
+
+-- I found this Cast() function on sqltutorial so the user wouldn't have to type in the time as well
+create procedure OrderHistory(@ordertime date)
+AS 
+begin 
+        select orders.*, orderdetails.*, menuitems.price, menuitems.itemname -- orders.orderid, orders.ordertype
+        from orders
+        inner join orderdetails on orders.orderID = orderdetails.orderid
+        inner join menuitems on orderdetails.itemID = menuitems.itemid
+
+
+        where cast(orders.ordertime as date) = @ordertime
+end;
+	execute orderhistory '2021-05-25'
