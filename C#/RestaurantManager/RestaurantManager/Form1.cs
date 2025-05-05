@@ -148,6 +148,6 @@ namespace RestaurantManager
     class Connect
     {
         //assigns the connection string
-        public static string connectionString = "Server=localhost;Database=RestaurantManagerDB;Trusted_Connection=True;";
+        public static string connectionString = "Server=localhost;Database=RestaurantManager;Trusted_Connection=True;";
     }   
 }

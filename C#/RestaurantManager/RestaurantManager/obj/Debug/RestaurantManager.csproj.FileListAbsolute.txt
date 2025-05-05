@@ -26,3 +26,17 @@ C:\JennipherM\SQL\database\phase3\C#\RestaurantManager\RestaurantManager\obj\Deb
 C:\JennipherM\SQL\database\phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.csproj.CoreCompileInputs.cache
 C:\JennipherM\SQL\database\phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.exe
 C:\JennipherM\SQL\database\phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.pdb
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\bin\Debug\RestaurantManager.exe.config
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\bin\Debug\RestaurantManager.exe
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\bin\Debug\RestaurantManager.pdb
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.csproj.AssemblyReference.cache
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.Admin_Window.resources
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.AdminForm.resources
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.Form1.resources
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.ManagerForm.resources
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.Properties.Resources.resources
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.StaffForm.resources
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.csproj.GenerateResource.cache
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.csproj.CoreCompileInputs.cache
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.exe
+C:\JennipherM\SQL\DB_Phase3\C#\RestaurantManager\RestaurantManager\obj\Debug\RestaurantManager.pdb
